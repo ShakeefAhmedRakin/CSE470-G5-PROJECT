@@ -20,10 +20,6 @@ const Banner = () => {
         <div>
       <button className="text-lg bg-theme-color font-bold text-white py-4 px-8">SIGN UP</button>
       <button className="text-lg bg-amber-400 ml-4 font-bold  py-4 px-8">BOOK NOW</button>
-
-          <button>
-
-          </button>
         </div>
 
       </div>
