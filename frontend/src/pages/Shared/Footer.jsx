@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <>
-      <h1></h1>
+      <div className="w-full h-60 bg-tertiary-color"></div>
     </>
   );
 };
