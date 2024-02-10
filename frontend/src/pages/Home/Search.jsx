@@ -8,15 +8,15 @@ const Search = () => {
     <>
       <div className="flex items-center">
         <div className="flex justify-end items-center gap-10">
-          <div className="flex-1">
-            <img src="search-image.png" alt="" />
+          <div className="flex-1" data-aos="fade-up" data-aos-delay="200">
+            <img src="search-image.png" />
           </div>
-          <div className="flex-1">
+          <div className="flex-1" data-aos="fade-up" data-aos-delay="50">
             <h1 className="font-bold text-3xl">Online Ticketing Made Easy!</h1>
-            <hr className="border-black my-2" />
+            <hr className="border-black mt-2 mb-3" />
             <form className="space-y-3" onSubmit={searchFunction}>
               {/* LEAVING FROM */}
-              <h2 className="text-theme-color font-bold text-2xl">
+              <h2 className="text-theme-color font-semibold text-2xl">
                 Leaving From
               </h2>
               <select className="select w-full bg-[#A89CFF] bg-opacity-20 font-bold">
@@ -25,14 +25,16 @@ const Search = () => {
                 <option value="Chittagong">Chittagong</option>
               </select>
               {/* GOING TO */}
-              <h2 className="text-theme-color font-bold text-2xl">Going To</h2>
+              <h2 className="text-theme-color font-semibold text-2xl">
+                Going To
+              </h2>
               <select className="select w-full bg-[#A89CFF] bg-opacity-20 font-bold">
                 <option defaultValue>Select Destination</option>
                 <option value="Dhaka">Dhaka</option>
                 <option value="Chittagong">Chittagong</option>
               </select>
               {/* DEPARTING DATE */}
-              <h2 className="text-theme-color font-bold text-2xl">
+              <h2 className="text-theme-color font-semibold text-2xl">
                 Departing On
               </h2>
               <div className="relative">
