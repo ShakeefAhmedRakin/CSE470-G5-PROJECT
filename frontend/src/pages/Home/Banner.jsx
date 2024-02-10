@@ -15,7 +15,7 @@ const Banner = () => {
         </div>
         <div className='flex items-center mb-6'>
           <div className='bg-amber-500 w-5 h-5 rounded-full'></div>
-          <p className='text-2xl ml-3'>Select your favorite seats visually.</p>
+          <p className='text-2xl ml-3'>Receive your tickets directly to your inbox.</p>
         </div>
         <div>
       <button className="text-lg bg-theme-color font-bold text-white py-4 px-8">SIGN UP</button>
