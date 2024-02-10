@@ -1,12 +1,14 @@
+import styles from './Navbar.module.css';
+
 const Navbar = () => {
   return <>
-  <div className="h-28 px-8  shadow-box-shadow mx-24 my-14 flex items-center justify-between">
+  <div className={` h-28 px-8 shadow-box-shadow mx-24 my-14 flex items-center justify-between`}>
     <div className="flex items-center ">
       <div className="h-16 mr-6">
         <img className="h-full" src="logo.png" alt="" />
       </div>
       <div>
-        <p className="text-3xl font-bold text-theme-color">BLue Line</p>
+        <p className={`${styles.glow} font-iceland text-3xl font-bold text-theme-color`}>BLue Line</p>
       </div>
       
     </div>
