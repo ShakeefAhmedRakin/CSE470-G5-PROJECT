@@ -1,29 +1,30 @@
 const Banner = () => {
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-10">
       <div className="w-3/5">
-        <p className="text-6xl mb-6 font-semibold">
+        <p className="text-5xl mb-6 font-semibold">
           Book Your Seats with Ease <br /> and Convenience
         </p>
-        <p className="text-3xl mb-6">
+        <p className="text-2xl mb-6 text-gray-500">
           Book your bus seats with ease and travel in comfort. Experience the
           convenience of choosing your preferred seats with just a few clicks.
         </p>
-        <div className="flex items-center mb-4">
+        <div className="flex items-center mb-4 text-gray-500">
           <div className="bg-theme-color w-5 h-5 rounded-full"></div>
-          <p className="text-2xl ml-3">Select your favorite seats visually.</p>
+          <p className="text-xl ml-3">Select your favorite seats visually.</p>
         </div>
-        <div className="flex items-center mb-6">
+        <div className="flex items-center mb-6 text-gray-500">
           <div className="bg-amber-500 w-5 h-5 rounded-full"></div>
-          <p className="text-2xl ml-3">
+          <p className="text-xl ml-3">
             Receive your tickets directly to your inbox.
           </p>
         </div>
-        <div>
-          <button className="text-lg bg-theme-color font-bold text-white py-4 px-8">
+        <div className="flex  gap-4">
+          <button className="btn btn-lg bg-theme-color font-bold text-white border-none hover:bg-theme-color hover:shadow-xl">
             SIGN UP
           </button>
-          <button className="text-lg bg-amber-400 ml-4 font-bold  py-4 px-8">
+
+          <button className="btn btn-lg bg-secondary-color font-bold border-none hover:bg-secondary-color hover:shadow-xl">
             BOOK NOW
           </button>
         </div>

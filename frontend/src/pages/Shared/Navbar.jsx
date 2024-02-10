@@ -22,7 +22,7 @@ const Navbar = () => {
           <button className="mx-12 text-lg font-bold">Home</button>
           <button className="mx-12 text-lg">About</button>
           <button className="mx-12 text-lg">Support</button>
-          <button className="text-lg bg-theme-color font-bold text-white py-4 px-8">
+          <button className="btn btn-lg bg-theme-color font-bold text-white border-none hover:bg-theme-color hover:shadow-xl">
             SIGN UP
           </button>
         </div>

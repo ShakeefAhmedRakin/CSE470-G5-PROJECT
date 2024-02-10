@@ -11,6 +11,9 @@ export default {
       boxShadow: {
         "box-shadow": "0px 4px 18.799999237060547px 0px #00000040",
       },
+      fontFamily: {
+        primary: ["Work Sans"],
+      },
     },
   },
   plugins: [require("daisyui")],

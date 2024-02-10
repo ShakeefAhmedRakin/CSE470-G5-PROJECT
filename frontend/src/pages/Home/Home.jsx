@@ -4,10 +4,10 @@ import Search from "./Search";
 const Home = () => {
   return (
     <div className="container mx-auto">
-      <div className="mb-10">
+      <div className="mb-28">
         <Banner></Banner>
       </div>
-      <div className="my-10">
+      <div className="my-28">
         <Search></Search>
       </div>
     </div>
