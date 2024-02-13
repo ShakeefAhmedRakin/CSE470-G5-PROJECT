@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 
 const Navbar = () => {
@@ -19,8 +20,12 @@ const Navbar = () => {
           </div>
         </div>
         <div>
+          <Link to={'/'}>
           <button className="mx-12 text-lg font-bold">Home</button>
+          </Link>
+          <Link to={'/about'}>
           <button className="mx-12 text-lg">About</button>
+          </Link>
           <button className="mx-12 text-lg">Support</button>
           <button className="btn btn-lg bg-theme-color font-bold text-white border-none hover:bg-theme-color hover:shadow-xl">
             SIGN UP
