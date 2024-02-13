@@ -24,7 +24,7 @@ const About = () => {
           million passengers a year.
         </p>
       </div>
-      <div className='mb-6' data-aos='fade-up' data-aos-delay='200'>
+      <div className='mb-6' data-aos='fade-up' data-aos-delay='50'>
         <h1 className='text-3xl text-theme-color mb-2'>Our Mission</h1>
         <p>
           The mission of the Transport Company may be categorized by 3 principal
@@ -50,7 +50,7 @@ const About = () => {
           </li>
         </ol>
       </div>
-      <div className='mb-6' data-aos='fade-up' data-aos-delay='400'>
+      <div className='mb-6' data-aos='fade-up' data-aos-delay='50'>
         <h1 className='text-3xl text-theme-color mb-2'>Our Management</h1>
         <p className='font-bold text-l '>Shoeb Islam Hamim</p>
         <p className="mb-2">Managing Director</p>
