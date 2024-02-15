@@ -20,13 +20,15 @@ const Navbar = () => {
           </div>
         </div>
         <div>
-          <Link to={'/'}>
-          <button className="mx-12 text-lg font-bold">Home</button>
+          <Link to={"/"}>
+            <button className="mx-12 text-lg font-bold">Home</button>
           </Link>
-          <Link to={'/about'}>
-          <button className="mx-12 text-lg">About</button>
+          <Link to={"/about"}>
+            <button className="mx-12 text-lg">About</button>
           </Link>
-          <button className="mx-12 text-lg">Support</button>
+          <Link to={"/support"}>
+            <button className="mx-12 text-lg">Support</button>
+          </Link>
           <button className="btn btn-lg bg-theme-color font-bold text-white border-none hover:bg-theme-color hover:shadow-xl">
             SIGN UP
           </button>
