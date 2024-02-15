@@ -1,4 +1,4 @@
-# Bus E-ticketing System ( GROUP - 05 )
+# Bus E-ticketing System ( GROUP - 07 ) [ Section - 05]
 
 ## Project Description
 
