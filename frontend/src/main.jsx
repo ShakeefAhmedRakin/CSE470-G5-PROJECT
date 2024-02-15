@@ -7,6 +7,7 @@ import Root from "./pages/Root";
 import About from "./pages/About/About";
 import Support from "./pages/Support/Support";
 import Login from "./pages/Login/Login";
+import Register from "./pages/Register/register";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/support",
         element: <Support></Support>,
+      }, 
+      {
+        path: "/register",
+        element: <Register></Register>,
       },
     ],
   },

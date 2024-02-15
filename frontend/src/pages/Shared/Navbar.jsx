@@ -34,7 +34,7 @@ const Navbar = () => {
             onClick={() => navigate("/login")}
             className="btn btn-lg bg-theme-color font-bold text-white border-none hover:bg-theme-color hover:shadow-xl"
           >
-            SIGN UP
+            LOGIN
           </button>
         </div>
       </div>
