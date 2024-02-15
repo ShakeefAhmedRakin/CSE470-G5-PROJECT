@@ -6,7 +6,7 @@ import { FaClock } from "react-icons/fa";
 const Footer = () => {
   return (
     <>
-      <div className='w-full h-60 bg-tertiary-color flex items-center justify-center flex-col'>
+      <div className='w-full h-60 bg-theme-color flex items-center justify-center flex-col'>
         <div className='flex gap-8 text-white justify-center text-xl font-bold mb-10'>
           <p>Home</p>
           <p>About</p>
