@@ -9,9 +9,11 @@ const Navbar = () => {
         className={` h-28 px-8 shadow-box-shadow mx-24 my-14 flex items-center justify-between`}
       >
         <div className="flex items-center ">
+          <Link to={'/'}>
           <div className="h-16 mr-6">
             <img className="h-full" src="logo.png" alt="" />
           </div>
+          </Link>
           <div>
             <p
               className={`${styles.glow} font-iceland text-3xl font-bold text-theme-color`}
