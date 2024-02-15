@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div
@@ -29,7 +30,10 @@ const Navbar = () => {
           <Link to={"/support"}>
             <button className="mx-12 text-lg">Support</button>
           </Link>
-          <button className="btn btn-lg bg-theme-color font-bold text-white border-none hover:bg-theme-color hover:shadow-xl">
+          <button
+            onClick={() => navigate("/login")}
+            className="btn btn-lg bg-theme-color font-bold text-white border-none hover:bg-theme-color hover:shadow-xl"
+          >
             SIGN UP
           </button>
         </div>
