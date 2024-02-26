@@ -2,17 +2,65 @@ import { useState } from "react";
 import { MdEmail, MdOutlinePhoneAndroid } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import  './style.css';
+import toast from "react-hot-toast";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import {app} from '../../Firebase/firebase.init';
+const auth = getAuth(app);
 const Register = () => {
+  const navigate=useNavigate()
+  // Form data
   const [seePassword, setSeePassword] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+
+
+  const OnSubmit = (event) => {
+    event.preventDefault();
+
+    const saveUserToDB = async({name,division,address,imamName,contactNo,email}) => {
+      const mosque = {name,division,address,imamName,contactNo,email}
+      fetch('http://localhost:5000/users', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(mosque),
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data._id){
+            toast.success('User Registration was Successful!')
+            navigate('/registered')
+          }
+          else{
+            toast.error('something went Wrong!')
+          }
+        })
+    }
+    console.log(name,email,phone,password);
+  
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(res => {
+        console.log(res);
+        // saveUserToDB()
+      })
+      .catch(error => {
+        console.log(error);
+        toast.error('Already Registered!')
+      })
+  }
   return (
     <>
       <div className='flex justify-center items-center min-h-[600px]'>
         <form
           className='bg-background rounded-xl px-5 py-8 w-full max-w-2xl'
           data-aos='fade-up'
+          onSubmit={OnSubmit}
         >
           <div className='flex justify-center flex-col items-center gap-2'>
             <div className='flex items-center gap-4'>
@@ -36,6 +84,7 @@ const Register = () => {
             <input
               type='text'
               name='name'
+              value={name} onChange={e => setName(e.target.value)}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5'
               placeholder='Your Name'
               required
@@ -52,6 +101,8 @@ const Register = () => {
             <input
               type='text'
               name='email'
+              value={email} onChange={e => setEmail(e.target.value)}
+
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5'
               placeholder='Your Email'
               required
@@ -69,6 +120,8 @@ const Register = () => {
             
               type='number'
               name='phone'
+              value={phone} onChange={e => setPhone(e.target.value)}
+
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 no-arrows'
               placeholder='Your Phone'
               required
@@ -84,6 +137,8 @@ const Register = () => {
             <input
               type={seePassword ? "text" : "password"}
               name='password'
+              value={password} onChange={e => setPassword(e.target.value)}
+
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5'
               placeholder='Your Password'
               required

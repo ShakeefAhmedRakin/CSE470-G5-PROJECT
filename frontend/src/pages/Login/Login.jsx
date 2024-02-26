@@ -1,17 +1,53 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { AuthContext } from "../../Context/AuthProvider";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {app} from '../../Firebase/firebase.init';
+const auth = getAuth(app);
+
+
 
 const Login = () => {
   const [seePassword, setSeePassword] = useState(false);
+  // form data
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const {role} = useContext(AuthContext)
+  const navigate = useNavigate();
+  const onSubmit = (event) => {
+    console.log(email,password);
+    event.preventDefault()
+    
+    signInWithEmailAndPassword(auth,email,password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log(user);
+      toast.success("Logged In!")
+      // firebase auth complete. now role auth
+
+
+
+
+    })
+    .catch((error) => {
+      toast.error('Wrong credentials')
+      console.log(error.message);
+    });
+    
+
+  }
   return (
     <>
       <div className="flex justify-center items-center min-h-[600px]">
         <form
           className="bg-background rounded-xl px-5 py-8 w-full max-w-2xl"
           data-aos="fade-up"
+          onSubmit={onSubmit}
         >
           <div className="flex justify-center flex-col items-center gap-2">
             <div className="flex items-center gap-4">
@@ -35,6 +71,7 @@ const Login = () => {
             <input
               type="text"
               name="email"
+              value={email} onChange={e => setEmail(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
               placeholder="Your Email"
               required
@@ -50,6 +87,7 @@ const Login = () => {
             <input
               type={seePassword ? "text" : "password"}
               name="password"
+              value={password} onChange={e => setPassword(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
               placeholder="Your Password"
               required
