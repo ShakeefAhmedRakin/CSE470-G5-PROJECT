@@ -1,8 +1,8 @@
 const About = () => {
   return (
-    <div className='min-h-screen mx-24 '>
-      <div className='mb-6' data-aos='fade-up' data-aos-delay='50'>
-        <h1 className='text-3xl text text-theme-color mb-2'>Company Profile</h1>
+    <div className="mt-12 container mx-auto">
+      <div className="mb-6" data-aos="fade-up" data-aos-delay="50">
+        <h1 className="text-3xl text text-theme-color mb-2">Company Profile</h1>
         <p>
           Blue Line is a transport company specializing in transportation of
           passenger bus services since 2020. From a humble beginning of local
@@ -24,14 +24,14 @@ const About = () => {
           million passengers a year.
         </p>
       </div>
-      <div className='mb-6' data-aos='fade-up' data-aos-delay='50'>
-        <h1 className='text-3xl text-theme-color mb-2'>Our Mission</h1>
+      <div className="mb-6" data-aos="fade-up" data-aos-delay="50">
+        <h1 className="text-3xl text-theme-color mb-2">Our Mission</h1>
         <p>
           The mission of the Transport Company may be categorized by 3 principal
           activities as follows.
         </p>
 
-        <ol className='list-disc list-inside space-y-2'>
+        <ol className="list-disc list-inside space-y-2">
           <li>
             Aim for efficient services through constant development towards
             world-class standards. The priorities are safety, convenience,
@@ -50,17 +50,16 @@ const About = () => {
           </li>
         </ol>
       </div>
-      <div className='mb-6' data-aos='fade-up' data-aos-delay='50'>
-        <h1 className='text-3xl text-theme-color mb-2'>Our Management</h1>
-        <p className='font-bold text-l '>Shoeb Islam Hamim</p>
+      <div className="mb-6" data-aos="fade-up" data-aos-delay="50">
+        <h1 className="text-3xl text-theme-color mb-2">Our Management</h1>
+        <p className="font-bold text-l ">Shoeb Islam Hamim</p>
         <p className="mb-2">Managing Director</p>
-        <p className='font-bold text-l'>Shakeef Ahmed Rakin</p>
+        <p className="font-bold text-l">Shakeef Ahmed Rakin</p>
         <p className="mb-2">Deputy Managing Director</p>
-        <p className='font-bold text-l'>Iffat Ara Nazmin</p>
+        <p className="font-bold text-l">Iffat Ara Nazmin</p>
         <p className="mb-2">Director marketing</p>
-        <p className='font-bold text-l'>TSHEWANG CHODEN</p>
+        <p className="font-bold text-l">TSHEWANG CHODEN</p>
         <p className="mb-2">General Manager</p>
-        
       </div>
     </div>
   );

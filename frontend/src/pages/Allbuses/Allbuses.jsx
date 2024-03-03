@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Allbuses = () => {
   const [buses, setBuses] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setLoading(true);
-    fetch("bus.json")
+    fetch("http://localhost:5000/all-buses")
       .then((res) => res.json())
       .then((data) => {
         setBuses(data);
@@ -27,7 +30,7 @@ const Allbuses = () => {
           <div className="grid grid-cols-2 gap-5">
             {buses.map((bus) => (
               <div
-                key={bus.id}
+                key={bus._id}
                 className="border rounded-xl flex justify-between items-start p-4"
               >
                 <div className="whitespace-nowrap flex-1">
@@ -48,7 +51,10 @@ const Allbuses = () => {
                 </div>
                 <div className="whitespace-nowrap flex-1 flex flex-col h-full justify-between items-end gap-2">
                   <p className="text-3xl font-medium">{bus.price} ৳</p>
-                  <button className="btn btn-sm border-none bg-theme-color text-white hover:bg-theme-color">
+                  <button
+                    className="btn btn-sm border-none bg-theme-color text-white hover:bg-theme-color"
+                    onClick={() => navigate(`/bus/${bus._id}`)}
+                  >
                     View Seats
                   </button>
                 </div>

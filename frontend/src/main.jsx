@@ -10,6 +10,8 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import AuthProvider from "./Context/AuthProvider";
 import Allbuses from "./pages/Allbuses/Allbuses";
+import BusDetails from "./pages/BusDetails/BusDetails";
+import PrivateRoute from "./Routes/PrivateRoute";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
       {
         path: "/all-buses",
         element: <Allbuses></Allbuses>,
+      },
+      {
+        path: "/bus/:id",
+        element: (
+          <PrivateRoute>
+            <BusDetails></BusDetails>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/support",
