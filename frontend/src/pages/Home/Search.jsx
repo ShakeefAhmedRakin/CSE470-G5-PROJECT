@@ -8,8 +8,12 @@ const Search = () => {
     <>
       <div className="flex items-center">
         <div className="flex justify-end items-center gap-10">
-          <div className="flex-1" data-aos="fade-up" data-aos-delay="200">
-            <img src="search-image.png" />
+          <div
+            className="flex-1 flex justify-center"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <img src="banner-pic.png" className="w-[70%] p-2 bobbing-div" />
           </div>
           <div className="flex-1" data-aos="fade-up" data-aos-delay="50">
             <h1 className="font-bold text-3xl">Online Ticketing Made Easy!</h1>
