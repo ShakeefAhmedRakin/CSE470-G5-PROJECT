@@ -9,6 +9,7 @@ import Support from "./pages/Support/Support";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import AuthProvider from "./Context/AuthProvider";
+import Allbuses from "./pages/Allbuses/Allbuses";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -27,9 +28,13 @@ const router = createBrowserRouter([
         element: <About></About>,
       },
       {
+        path: "/all-buses",
+        element: <Allbuses></Allbuses>,
+      },
+      {
         path: "/support",
         element: <Support></Support>,
-      }, 
+      },
       {
         path: "/register",
         element: <Register></Register>,
@@ -41,9 +46,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
-    <RouterProvider router={router} />
-
+      <RouterProvider router={router} />
     </AuthProvider>
-    
   </React.StrictMode>
 );
