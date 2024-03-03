@@ -94,38 +94,56 @@ const Support = () => {
           </div>
 
           {/* Customer Support */}
-          <div className="my-12">
-            <h2 className="text-3xl font-bold text-center mb-10">
+          <div className="my-16">
+            <h2 className="text-3xl font-bold text-center mb-6">
               Customer Support Hotlines
             </h2>
             <div className="mb-4">
-              <p className="mb-1">
+              <p className="mb-1 text-center">
                 If you need assistance or have any inquiries, please feel free
                 to reach out to our dedicated customer support team. Our
                 representatives are available to assist you.
               </p>
             </div>
             <div className="mb-4">
-              <p className="font-semibold">Phone Hotlines:</p>
+              <p className="font-bold mb-1">Phone Hotlines:</p>
               <ul className="list-disc pl-5">
                 <li>
                   <span className="font-semibold">General Inquiries:</span>{" "}
-                  Call: <a href="tel:+18001234567">+1-800-123-4567</a>
+                  Call:{" "}
+                  <a
+                    href="tel:+18001234567"
+                    className="text-blue-500 hover:underline cursor-pointer"
+                  >
+                    +1-800-123-4567
+                  </a>
                 </li>
                 <li>
-                  <span className="font-semibold">Booking Assistance:</span>{" "}
-                  Call: <a href="tel:+18009876543">+1-800-987-6543</a>
+                  <span className="font-bold mb-1">Booking Assistance:</span>{" "}
+                  Call:{" "}
+                  <a
+                    href="tel:+18009876543"
+                    className="text-blue-500 hover:underline cursor-pointer"
+                  >
+                    +1-800-987-6543
+                  </a>
                 </li>
                 <li>
-                  <span className="font-semibold">
+                  <span className="font-bold mb-1">
                     Feedback and Complaints:
                   </span>{" "}
-                  Call: <a href="tel:+18005557890">+1-800-555-7890</a>
+                  Call:{" "}
+                  <a
+                    href="tel:+18005557890"
+                    className="text-blue-500 hover:underline cursor-pointer"
+                  >
+                    +1-800-555-7890
+                  </a>
                 </li>
               </ul>
             </div>
             <div className="mb-4">
-              <p className="font-semibold">Working Hours:</p>
+              <p className="font-bold mb-1">Working Hours:</p>
               <p className="">
                 Our customer support team is available to assist you during the
                 following hours:
@@ -141,7 +159,10 @@ const Support = () => {
               <p className="font-semibold">Email Support:</p>
               <p className="">
                 You can also reach us via email at{" "}
-                <a href="mailto:support@example.com" className="text-blue-500">
+                <a
+                  href="mailto:support@example.com"
+                  className="text-blue-500 hover:underline cursor-pointer"
+                >
                   support@example.com
                 </a>
                 . We strive to respond to all inquiries within 24 hours.
@@ -151,7 +172,14 @@ const Support = () => {
               <p className="font-semibold">Emergency Support:</p>
               <p className="">
                 For urgent matters or emergencies, please dial our emergency
-                hotline at <a href="tel:+1800911911">+1-800-911-911</a>.
+                hotline at{" "}
+                <a
+                  href="tel:+1800911911"
+                  className="text-blue-500 hover:underline cursor-pointer"
+                >
+                  +1-800-911-911
+                </a>
+                .
               </p>
             </div>
           </div>
