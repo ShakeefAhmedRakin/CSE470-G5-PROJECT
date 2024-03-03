@@ -3,11 +3,13 @@ import { useParams } from "react-router-dom";
 import { MdOutlineEventSeat } from "react-icons/md";
 import { PiSteeringWheel } from "react-icons/pi";
 import { toast } from "sonner";
+import useAuth from "../../hooks/useAuth";
 const BusDetails = () => {
   const params = useParams();
   const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     setLoading(true);
@@ -41,7 +43,7 @@ const BusDetails = () => {
         </>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-20">
+          <div className="flex justify-between gap-16 border-t-2 border-theme-color py-16 px-10 rounded-[10%] bg-[#fdfdfd]">
             <div className="h-fit flex-1">
               <div className="flex justify-between">
                 <div>
@@ -59,15 +61,19 @@ const BusDetails = () => {
               </div>
               <hr className="border-dotted"></hr>
               <div className="flex justify-between my-4">
-                <h1 className="text-lg flex items-center gap-2 font-medium text-[#828489]">
+                <h1 className="text-sm flex items-center gap-2 font-bold text-[#828489]">
                   <MdOutlineEventSeat className="text-3xl"></MdOutlineEventSeat>
                   Available
                 </h1>
-                <h1 className="text-lg flex items-center gap-2 font-medium text-red-400">
+                <h1 className="text-sm flex items-center gap-2 font-bold text-red-400">
                   <MdOutlineEventSeat className="text-3xl"></MdOutlineEventSeat>
                   Booked
                 </h1>
-                <h1 className="text-lg flex items-center gap-2 font-medium text-[#1DD100]">
+                <h1 className="text-sm flex items-center gap-2 font-bold text-orange-300">
+                  <MdOutlineEventSeat className="text-3xl"></MdOutlineEventSeat>
+                  Your Bookings
+                </h1>
+                <h1 className="text-sm flex items-center gap-2 font-bold text-[#1DD100]">
                   <MdOutlineEventSeat className="text-3xl"></MdOutlineEventSeat>
                   Selected
                 </h1>
@@ -80,9 +86,16 @@ const BusDetails = () => {
                   </button>
                 </div>
               </div>
-              <div className="grid grid-cols-4 gap-x-12 gap-y-4 mt-4">
+              <div className="grid grid-cols-4 gap-x-6 gap-y-3 mt-3">
                 {details.seats.map((seat) => (
-                  <div key={seat.seat_number} className="flex justify-end">
+                  <div
+                    key={seat.seat_number}
+                    className={`flex ${
+                      seat.seat_number[1] === "1" ? "justify-start" : ""
+                    } ${seat.seat_number[1] === "2" ? "justify-start" : ""} ${
+                      seat.seat_number[1] === "3" ? "justify-end" : ""
+                    } ${seat.seat_number[1] === "4" ? "justify-end" : ""}`}
+                  >
                     <button
                       className={`btn border-none w-24 ${
                         selectedSeats.includes(seat.seat_number)
@@ -105,7 +118,8 @@ const BusDetails = () => {
                 ))}
               </div>
             </div>
-            <div className="w-full lg:max-w-md">
+            <div className="divider lg:divider-horizontal m-0 p-0"></div>
+            <div className="w-full flex-1">
               <h1 className="font-semibold text-2xl mb-4">
                 Your Selected Seats
               </h1>
@@ -139,20 +153,20 @@ const BusDetails = () => {
                     </span>
                   </h1>
                 </div>
-                <div
-                  id="discounted-amount-container"
-                  className="flex justify-between my-1 opacity-0"
-                >
-                  <h1 className="font-bold">Discounted Amount</h1>
-                  <h1 className="font-semibold">
-                    BDT <span id="discounted-amount">0</span>
+                <hr className="my-5" />
+                <div className="mb-2">
+                  <h1 className="font-bold">
+                    Email: <span className="font-normal">{user.email}</span>
                   </h1>
                 </div>
-
-                <div className="flex justify-between my-1">
-                  <h1 className="font-bold">Grand Total</h1>
-                  <h1 className="font-semibold">
-                    BDT <span id="grand-total">0</span>
+                <div className="mb-2">
+                  <h1 className="font-bold">
+                    Name: <span className="font-normal">testname</span>
+                  </h1>
+                </div>
+                <div className="mb-2">
+                  <h1 className="font-bold">
+                    Phone Number: <span className="font-normal">012345</span>
                   </h1>
                 </div>
               </div>
