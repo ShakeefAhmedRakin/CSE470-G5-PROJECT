@@ -73,7 +73,7 @@ const Register = () => {
         // saveUserToDB()
       })
       .catch((error) => {
-        toast.error(error);
+        toast.error(error.message);
       });
   };
   return (
