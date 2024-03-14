@@ -12,6 +12,7 @@ import AuthProvider from "./Context/AuthProvider";
 import Allbuses from "./pages/Allbuses/Allbuses";
 import BusDetails from "./pages/BusDetails/BusDetails";
 import PrivateRoute from "./Routes/PrivateRoute";
+import SearchResults from "./pages/SearchResults/SearchResults";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/all-buses",
         element: <Allbuses></Allbuses>,
+      },
+      {
+        path: "/search/:depart/:destination/:date",
+        element: <SearchResults></SearchResults>,
       },
       {
         path: "/bus/:id",
