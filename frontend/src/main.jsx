@@ -12,6 +12,9 @@ import AuthProvider from "./Context/AuthProvider";
 import Allbuses from "./pages/Allbuses/Allbuses";
 import BusDetails from "./pages/BusDetails/BusDetails";
 import PrivateRoute from "./Routes/PrivateRoute";
+import Payment from "./pages/Payment/Payment";
+import Completion from "./pages/Payment/Completion";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -48,6 +51,12 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },{
+        path: "/payment",
+        element: <Payment></Payment>,
+      },{
+        path: "/completion",
+        element: <Completion></Completion>,
       },
     ],
   },
