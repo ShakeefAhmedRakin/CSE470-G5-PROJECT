@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { MdOutlineEventSeat } from "react-icons/md";
 import { PiSteeringWheel } from "react-icons/pi";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
+import { getBusStatus } from "../../utils/getBusStatus";
 const BusDetails = () => {
   const params = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(true);
+  const [userDetails, setUserDetails] = useState({});
   const [selectedSeats, setSelectedSeats] = useState([]);
   const { user } = useAuth();
+  const [allowBooking, setAllowBooking] = useState(false);
+
+  // FETCHING USER DETAILS
+  useEffect(() => {
+    fetch(`http://localhost:5000/user/info/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => setUserDetails(data));
+  }, [user]);
 
   useEffect(() => {
     setLoading(true);
@@ -17,6 +29,11 @@ const BusDetails = () => {
       .then((res) => res.json())
       .then((data) => {
         setDetails(data);
+        if (
+          getBusStatus(data.arrival_time, data.departure_time) === "Upcoming"
+        ) {
+          setAllowBooking(true);
+        }
         setLoading(false);
       });
   }, [params]);
@@ -47,7 +64,38 @@ const BusDetails = () => {
             <div className="h-fit flex-1">
               <div className="flex justify-between">
                 <div>
-                  <h1 className="font-semibold text-3xl">{details.company}</h1>
+                  <h1 className="font-semibold text-3xl flex items-center gap-4">
+                    {details.company}{" "}
+                    <span
+                      className={`badge badge-sm border-none text-white ${
+                        getBusStatus(
+                          details.arrival_time,
+                          details.departure_time
+                        ) === "Completed"
+                          ? "bg-green-500"
+                          : ""
+                      } ${
+                        getBusStatus(
+                          details.arrival_time,
+                          details.departure_time
+                        ) === "On Route"
+                          ? "bg-yellow-600"
+                          : ""
+                      } ${
+                        getBusStatus(
+                          details.arrival_time,
+                          details.departure_time
+                        ) === "Upcoming"
+                          ? "bg-theme-color"
+                          : ""
+                      }`}
+                    >
+                      {getBusStatus(
+                        details.arrival_time,
+                        details.departure_time
+                      )}
+                    </span>
+                  </h1>
                   <h1 className="font-semibold text-gray-500">
                     {details.idnumber}
                   </h1>
@@ -69,11 +117,11 @@ const BusDetails = () => {
                   <MdOutlineEventSeat className="text-3xl"></MdOutlineEventSeat>
                   Booked
                 </h1>
-                <h1 className="text-sm flex items-center gap-2 font-bold text-orange-300">
+                <h1 className="text-sm flex items-center gap-2 font-bold text-green-700">
                   <MdOutlineEventSeat className="text-3xl"></MdOutlineEventSeat>
                   Your Bookings
                 </h1>
-                <h1 className="text-sm flex items-center gap-2 font-bold text-[#1DD100]">
+                <h1 className="text-sm flex items-center gap-2 font-bold text-theme-color">
                   <MdOutlineEventSeat className="text-3xl"></MdOutlineEventSeat>
                   Selected
                 </h1>
@@ -87,28 +135,43 @@ const BusDetails = () => {
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-x-6 gap-y-3 mt-3">
-                {details.seats.map((seat) => (
+                {details.seats.map((seat, index) => (
                   <div
-                    key={seat.seat_number}
+                    key={index}
                     className={`flex ${
                       seat.seat_number[1] === "1" ? "justify-start" : ""
                     } ${seat.seat_number[1] === "2" ? "justify-start" : ""} ${
                       seat.seat_number[1] === "3" ? "justify-end" : ""
                     } ${seat.seat_number[1] === "4" ? "justify-end" : ""}`}
                   >
+                    {/* bg-[#f1f1f1] hover:bg-[#e4e4e4] */}
                     <button
                       className={`btn border-none w-24 ${
                         selectedSeats.includes(seat.seat_number)
-                          ? "bg-[#1cd100] hover:bg-[#4daf3e]"
-                          : seat.status === "available"
-                          ? "bg-[#f1f1f1] hover:bg-[#e4e4e4]"
-                          : "bg-red-400 hover:bg-red-600"
+                          ? "bg-theme-color hover:bg-[#4355b8] text-white"
+                          : seat.status === "booked" &&
+                            seat?.booked === user.email
+                          ? "bg-green-700 hover:bg-green-800 text-white"
+                          : seat.status === "booked" &&
+                            seat?.booked !== user.email
+                          ? "bg-red-500 hover:bg-red-600 text-white"
+                          : "bg-[#f1f1f1] hover:bg-[#e4e4e4]"
                       } `}
                       onClick={() => {
-                        if (seat.status === "available") {
-                          selectSeat(seat.seat_number);
+                        if (allowBooking) {
+                          if (seat.status === "available") {
+                            selectSeat(seat.seat_number);
+                          } else {
+                            if (seat.booked === user?.email) {
+                              toast.error("Seat is already booked by you");
+                            } else {
+                              toast.error("Seat is not available");
+                            }
+                          }
                         } else {
-                          toast.error("Seat is not available");
+                          toast.error(
+                            "Bus journey is already on route or completed."
+                          );
                         }
                       }}
                     >
@@ -135,12 +198,12 @@ const BusDetails = () => {
                   <h1 className="font-bold flex justify-end">Price</h1>
                 </div>
                 <hr className="my-1 border-dotted"></hr>
-                <div className="grid grid-cols-2 gap-x-16 gap-y-2">
-                  {selectedSeats.map((seat) => (
-                    <>
+                <div className="grid grid-cols-1 gap-x-16 gap-y-2">
+                  {selectedSeats.map((seat, index) => (
+                    <div key={index} className="grid grid-cols-2">
                       <div className="font-medium">{seat}</div>
                       <div className="text-right">{details.price}</div>
-                    </>
+                    </div>
                   ))}
                 </div>
                 <hr className="mb-5"></hr>
@@ -161,50 +224,40 @@ const BusDetails = () => {
                 </div>
                 <div className="mb-2">
                   <h1 className="font-bold">
-                    Name: <span className="font-normal">testname</span>
+                    Name:{" "}
+                    <span className="font-normal">{userDetails.name}</span>
                   </h1>
                 </div>
                 <div className="mb-2">
                   <h1 className="font-bold">
-                    Phone Number: <span className="font-normal">012345</span>
+                    Phone Number:{" "}
+                    <span className="font-normal">{userDetails.phone}</span>
                   </h1>
                 </div>
-              </div>
-              {/* <div className="p-4">
-                <h1 className="font-bold">Passenger Name*</h1>
-                <input
-                  type="text"
-                  className="input input-bordered border-gray-300 w-full my-3"
-                  placeholder="Enter Your Name"
-                ></input>
-                <h1 className="font-bold">Phone Number*</h1>
-                <input
-                  type="text"
-                  id="phone-number-input"
-                  className="input input-bordered border-gray-300 w-full my-3"
-                  placeholder="Enter Your Number"
-                ></input>
-                <h1 className="font-bold">Email ID</h1>
-                <input
-                  type="text"
-                  className="input input-bordered border-gray-300 w-full my-3"
-                  placeholder="Enter Your Email"
-                ></input>
                 <button
-                  id="next-button"
-                  className="btn w-full bg-[#1DD100] hover:bg-[#1DD100] text-white btn-disabled"
+                  className="btn w-full bg-theme-color text-white border-theme-color hover:bg-theme-color hover:border-theme-color"
+                  onClick={() => {
+                    if (selectedSeats.length === 0) {
+                      toast.error("No Seats Selected");
+                    } else {
+                      navigate("/payment", {
+                        state: {
+                          seatInfo: {
+                            busDetails: details,
+                            email: user?.email,
+                            selectedSeats,
+                            amount: selectedSeats.length * details.price,
+                          },
+
+                          location: location.pathname,
+                        },
+                      });
+                    }
+                  }}
                 >
-                  Next
+                  Proceed
                 </button>
-                <div className="flex justify-around gap-3 mt-5">
-                  <span className="link text-gray-500">
-                    Terms and Condition
-                  </span>
-                  <span className="link text-gray-500">
-                    Cancellation Policy
-                  </span>
-                </div>
-              </div> */}
+              </div>
             </div>
           </div>
         </>

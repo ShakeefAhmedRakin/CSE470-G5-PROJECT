@@ -16,6 +16,7 @@ import Payment from "./pages/Payment/Payment";
 import Completion from "./pages/Payment/Completion";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import UserProfile from "./pages/UserProfile/UserProfile";
+import BookingDetails from "./pages/BookingDetails/BookingDetails";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -59,7 +60,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/payment",
-        element: <Payment></Payment>,
+        element: (
+          <PrivateRoute>
+            <Payment></Payment>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/completion",
@@ -67,9 +72,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/myprofile/:email",
-        element: <UserProfile></UserProfile>,
+        element: (
+          <PrivateRoute>
+            <UserProfile></UserProfile>
+          </PrivateRoute>
+        ),
         loader: ({ params }) =>
           fetch(`http://localhost:5000/user/info/${params.email}`),
+      },
+      {
+        path: "/booking/:id",
+        element: (
+          <PrivateRoute>
+            <BookingDetails></BookingDetails>
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/booking/info/${params.id}`),
       },
     ],
   },

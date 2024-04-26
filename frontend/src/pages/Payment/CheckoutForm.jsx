@@ -1,54 +1,171 @@
-import { PaymentElement } from "@stripe/react-stripe-js";
-import { useState } from "react";
-import { useStripe, useElements } from "@stripe/react-stripe-js";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-export default function CheckoutForm() {
+const CheckoutForm = ({ info, handleStateClear }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
 
-  const [message, setMessage] = useState(null);
+  const [clientSecret, setClientSecret] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const { user } = useAuth();
+  const [userDetails, setUserDetails] = useState({});
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // FETCHING USER DETAILS
+  useEffect(() => {
+    fetch(`http://localhost:5000/user/info/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => setUserDetails(data));
+  }, [user]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/create-payment-intent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(info?.seatInfo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setClientSecret(data.clientSecret);
+      });
+  }, []);
+
+  const handleSubmit = async (event) => {
+    setIsProcessing(true);
+    event.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-  
       return;
     }
 
-    setIsProcessing(true);
+    const card = elements.getElement(CardElement);
 
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/completion`,
-      },
-    });
-
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message);
-    } else {
-      setMessage("An unexpected error occured.");
+    if (card === null) {
+      return;
     }
 
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card,
+    });
+
+    if (error) {
+      toast.error(error.message);
+      setIsProcessing(false);
+      return;
+    }
+
+    const { paymentIntent, error: confirmError } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            email: userDetails?.email || "N/A",
+            name: userDetails?.name || "N/A",
+            phone: userDetails?.phone || "N/A",
+          },
+        },
+      });
+
+    if (confirmError) {
+      toast.error(confirmError.message);
+      setIsProcessing(false);
+      return;
+    } else {
+      if (paymentIntent.status === "succeeded") {
+        console.log(paymentIntent);
+        const bookingInfo = {
+          email: userDetails?.email || "N/A",
+          name: userDetails?.name || "N/A",
+          phone: userDetails?.phone || "N/A",
+          amount: info.seatInfo.amount,
+          bus_id: info.seatInfo.busDetails._id,
+          selectedSeats: info.seatInfo.selectedSeats,
+          transaction_id: paymentIntent.id,
+          departure_location: info.seatInfo.busDetails.departure_location,
+          departure_time: info.seatInfo.busDetails.departure_time,
+          destination_location: info.seatInfo.busDetails.destination_location,
+          arrival_time: info.seatInfo.busDetails.arrival_time,
+          company: info.seatInfo.busDetails.company,
+          idnumber: info.seatInfo.busDetails.idnumber,
+        };
+
+        // UPDATE SEAT STATUS API
+        fetch("http://localhost:5000/update-seat-status", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookingInfo),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.modifiedCount > 0) {
+              fetch("http://localhost:5000/create-booking-info", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(bookingInfo),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  console.log(data);
+                  if (data.insertedId) {
+                    toast.success("Seat has been booked");
+                    handleStateClear();
+                    navigate(`/booking/${data.insertedId}`);
+                  }
+                });
+            }
+          });
+      }
+    }
     setIsProcessing(false);
   };
 
-
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement  className="bg-white p-3 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500" id="payment-element" />
-      <button 
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
-      disabled={isProcessing || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isProcessing ? "Processing ... " : "Pay now"}
-        </span>
+    <form
+      id="payment-form"
+      onSubmit={handleSubmit}
+      className="border border-dotted rounded-lg p-4"
+    >
+      <CardElement
+        options={{
+          style: {
+            base: {
+              fontSize: "18px",
+              color: "#424770",
+              letterSpacing: "0.025em",
+              "::placeholder": {
+                color: "#aab7c4",
+              },
+            },
+            invalid: {
+              color: "#9e2146",
+            },
+          },
+        }}
+      ></CardElement>
+
+      <button
+        className="btn w-full mt-3 bg-theme-color text-white border-theme-color hover:bg-theme-color hover:border-theme-color disabled:bg-transparent disabled:border-theme-color disabled:text-theme-color"
+        disabled={!stripe || !clientSecret || isProcessing}
+      >
+        {!stripe || !clientSecret || isProcessing ? (
+          <span className="loading loading-spinner loading-md"></span>
+        ) : (
+          "Pay"
+        )}
       </button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
     </form>
   );
-}
+};
+
+export default CheckoutForm;

@@ -58,6 +58,26 @@ async function run() {
       });
     });
 
+    // STRIPE
+    app.get("/payment-config", (req, res) => {
+      res.send({
+        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      });
+    });
+
+    app.post("/create-payment-intent", async (req, res) => {
+      try {
+        const paymentIntent = await stripe.paymentIntents.create({
+          currency: "usd",
+          amount: 100,
+          automatic_payment_methods: { enabled: true },
+        });
+        res.send({ clientSecret: paymentIntent.client_secret });
+      } catch (e) {
+        return res.status(400).send({ error: { message: e.message } });
+      }
+    });
+
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
@@ -68,28 +88,7 @@ async function run() {
   }
 }
 run().catch(console.dir);
-// stripe payment 
-
-app.get("/payment-config", (req, res) => {
-  res.send({
-    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-  });
-});
-
-app.post("/create-payment-intent", async (req, res) => {
-  try{
-    const paymentIntent=await stripe.paymentIntents.create({
-      currency:"usd",
-      amount:100,
-      automatic_payment_methods:{enabled:true,
-      }
-    })
-    res.send({clientSecret:paymentIntent.client_secret})
-  }
-  catch(e){
-    return res.status(400).send({error:{message:e.message}})
-  }
-});
+// stripe payment
 
 app.get("/", (req, res) => {
   res.send("Server is running");
