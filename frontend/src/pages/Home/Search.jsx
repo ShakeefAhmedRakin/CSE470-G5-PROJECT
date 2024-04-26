@@ -1,7 +1,27 @@
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 const Search = () => {
+  const navigate = useNavigate();
   const searchFunction = (e) => {
     e.preventDefault();
-    console.log("Searching");
+    const depart = e.target.depart.value;
+    const destination = e.target.destination.value;
+    const date = e.target.date.value;
+
+    if (depart === "Select Departing Location") {
+      toast.error("Select departing location!");
+      return;
+    }
+    if (destination === "Select Destination") {
+      toast.error("Select destination!");
+      return;
+    }
+    if (date === "") {
+      toast.error("Select a date!");
+      return;
+    }
+    navigate(`/search/${depart}/${destination}/${date}`);
   };
 
   return (
@@ -23,7 +43,11 @@ const Search = () => {
               <h2 className="text-theme-color font-semibold text-2xl">
                 Leaving From
               </h2>
-              <select className="select w-full bg-[#A89CFF] bg-opacity-20 font-bold">
+              <select
+                className="select w-full bg-[#A89CFF] bg-opacity-20 font-bold"
+                name="depart"
+                required
+              >
                 <option defaultValue>Select Departing Location</option>
                 <option value="Dhaka">Dhaka</option>
                 <option value="Chittagong">Chittagong</option>
@@ -32,7 +56,11 @@ const Search = () => {
               <h2 className="text-theme-color font-semibold text-2xl">
                 Going To
               </h2>
-              <select className="select w-full bg-[#A89CFF] bg-opacity-20 font-bold">
+              <select
+                className="select w-full bg-[#A89CFF] bg-opacity-20 font-bold"
+                name="destination"
+                required
+              >
                 <option defaultValue>Select Destination</option>
                 <option value="Dhaka">Dhaka</option>
                 <option value="Chittagong">Chittagong</option>
@@ -45,6 +73,7 @@ const Search = () => {
                 <input
                   type="date"
                   className="select w-full bg-[#A89CFF] bg-opacity-20 font-bold"
+                  name="date"
                 />
               </div>
               {/* SUBMIT BUTTON */}

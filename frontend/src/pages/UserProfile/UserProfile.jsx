@@ -1,23 +1,33 @@
+import { useLoaderData } from "react-router-dom";
+import { CiUser } from "react-icons/ci";
+
 const UserProfile = () => {
+  const data = useLoaderData();
+
   return (
-    <div className="p-8 bg-slate-200 shadow rounded-md mt-14">
-      <img
-        className="w-48 h-48 mx-auto rounded-full shadow-xl"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfOdHY85BD1Z6V5ElJRWk5i_GhTmMAkedS0WPftvYYbGCP17F_pAcCNktlul8WQ4geqCs&usqp=CAU"
-        alt=""
-      />
-      <div className="mt-5 flex justify-center">
-        <label
-          htmlFor="upload-button"
-          className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Upload Picture
-        </label>
-        <input id="upload-button" type="file" className="hidden" />
+    <div className="p-8 my-24 container mx-auto">
+      <div className="flex justify-center text-[100px]">
+        <CiUser></CiUser>
       </div>
+      <div className="mt-5 flex justify-center"></div>
       <div className="pb-12 text-center pt-5">
-        <h1 className="text-4xl font-medium text-gray-700">Dummy User</h1>
-        <p className="font-light text-gray-600 mt-3">dummymail@gmail.com</p>
+        <h1 className="text-4xl font-medium text-gray-700">{data.name}</h1>
+        <p className="font-light text-gray-600 mt-3">{data.email}</p>
+        <p className="font-light text-gray-600 mt-3">{data.phone}</p>
+      </div>
+      <div className="grid grid-cols-2 gap-5">
+        {/* PAST BOOKINGS */}
+        <div>
+          <h1 className="text-center border-b-2 font-semibold text-xl p-2 rounded-full px-4 border-theme-color">
+            Previous Bookings
+          </h1>
+        </div>
+        {/* UPCOMING BOOKINGS */}
+        <div>
+          <h1 className="text-center border-b-2 font-semibold text-xl p-2 rounded-full px-4 border-secondary-color">
+            Upcoming Bookings
+          </h1>
+        </div>
       </div>
     </div>
   );

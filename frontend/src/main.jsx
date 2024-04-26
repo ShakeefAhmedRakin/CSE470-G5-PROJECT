@@ -14,7 +14,8 @@ import BusDetails from "./pages/BusDetails/BusDetails";
 import PrivateRoute from "./Routes/PrivateRoute";
 import Payment from "./pages/Payment/Payment";
 import Completion from "./pages/Payment/Completion";
-
+import SearchResults from "./pages/SearchResults/SearchResults";
+import UserProfile from "./pages/UserProfile/UserProfile";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
         element: <Allbuses></Allbuses>,
       },
       {
+        path: "/search/:depart/:destination/:date",
+        element: <SearchResults></SearchResults>,
+      },
+      {
         path: "/bus/:id",
         element: (
           <PrivateRoute>
@@ -51,12 +56,20 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
-      },{
+      },
+      {
         path: "/payment",
         element: <Payment></Payment>,
-      },{
+      },
+      {
         path: "/completion",
         element: <Completion></Completion>,
+      },
+      {
+        path: "/myprofile/:email",
+        element: <UserProfile></UserProfile>,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/user/info/${params.email}`),
       },
     ],
   },

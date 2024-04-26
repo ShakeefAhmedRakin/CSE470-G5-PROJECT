@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import useAuth from "../../hooks/useAuth";
+import { CiUser } from "react-icons/ci";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const Navbar = () => {
             </ul>
           </div>
           <div className="flex items-center gap-4">
-            <img className="h-16" src="logo.png" />
+            <img className="h-16" src="/logo.png" />
             <p
               className={`${styles.glow} font-iceland text-3xl font-bold text-theme-color`}
             >
@@ -67,14 +68,43 @@ const Navbar = () => {
         <div className="navbar-end">
           {user ? (
             <>
-              <div className="flex items-center gap-2">
-                <h1 className="text-sm text-gray-500">{user.email}</h1>
-                <button
-                  onClick={() => logOut()}
-                  className="btn bg-theme-color font-bold text-white border-none hover:bg-theme-color hover:shadow-xl"
-                >
-                  Logout
-                </button>
+              <div className="flex items-center gap-4">
+                <div className="dropdown dropdown-end">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-circle hover:bg-transparent hover:shadow-2xl"
+                  >
+                    <div className="rounded-full">
+                      <div className="border-theme-color border text-theme-color rounded-full p-1 shadow-lg">
+                        <CiUser className="text-3xl"></CiUser>
+                      </div>
+                    </div>
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content mt-3 flex flex-col gap-1 z-50 p-1 font-semibold shadow bg-base-100 rounded-lg w-fit"
+                  >
+                    <div className="flex flex-col items-center justify-center my-4 px-2">
+                      <CiUser className="text-3xl text-gray-500"></CiUser>
+                      <h1 className="text-xs text-center font-bold text-gray-500">
+                        {user.email}
+                      </h1>
+                    </div>
+                    <Link
+                      className="text-theme-color w-full btn border-theme-color bg-transparent hover:bg-theme-color hover:text-white hover:border-theme-color shadow-none"
+                      to={`/myprofile/${user.email}`}
+                    >
+                      My Account
+                    </Link>
+                    <button
+                      className="text-[#e8483c] w-full btn border-[#e8483c] bg-transparent hover:bg-[#e8483c] shadow-none hover:text-white hover:border-[#e8483c]"
+                      onClick={() => logOut()}
+                    >
+                      Logout
+                    </button>
+                  </ul>
+                </div>
               </div>
             </>
           ) : (
