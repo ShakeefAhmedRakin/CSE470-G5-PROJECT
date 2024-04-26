@@ -1,11 +1,9 @@
-
-
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
 
-const Payment=()=> {
+const Payment = () => {
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
@@ -28,21 +26,19 @@ const Payment=()=> {
   }, []);
 
   return (
-    <><div className="min-h-screen flex flex-col items-center  ">
-      <p className="font-bold text-xl mb-4">Payment</p>
-      <div className="w-[500px]">
-
-        
-      {clientSecret && stripePromise && (
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm />
-        </Elements>
-       
-      )} 
+    <>
+      <div className="min-h-screen flex flex-col items-center  ">
+        <p className="font-bold text-xl mb-4">Payment</p>
+        <div className="w-[500px]">
+          {clientSecret && stripePromise && (
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <CheckoutForm />
+            </Elements>
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
-}
+};
 
 export default Payment;
