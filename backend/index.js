@@ -23,6 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const busesCollection = client.db("BlueLine").collection("BusesCollection");
+    const userCollection = client.db("BlueLine").collection("userCollection");
 
     // GET API FOR ALL BUSES
     app.get("/all-buses", async (req, res) => {
@@ -36,6 +37,22 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await busesCollection.findOne(query);
       res.send(result);
+    });
+
+    // POST API FOR USER REGISTER
+    app.post("/user/register", async (req, res) => {
+      const userDetails = req.body;
+      const result = userCollection.insertOne(userDetails);
+      res.send(result);
+    });
+
+    // GET API FOR USER INFO
+    app.get("/user/info/:email", (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      userCollection.findOne(query).then((result) => {
+        res.send(result);
+      });
     });
 
     await client.db("admin").command({ ping: 1 });
