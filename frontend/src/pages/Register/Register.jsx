@@ -21,33 +21,6 @@ const Register = () => {
   const OnSubmit = (e) => {
     e.preventDefault();
 
-    const saveUserToDB = async ({
-      name,
-      division,
-      address,
-      imamName,
-      contactNo,
-      email,
-    }) => {
-      const mosque = { name, division, address, imamName, contactNo, email };
-      fetch("http://localhost:5000/users", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(mosque),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data._id) {
-            toast.success("User Registration was Successful!");
-            navigate("/registered");
-          } else {
-            toast.error("something went Wrong!");
-          }
-        });
-    };
-
     const form = e.target;
 
     const email = form.email.value;
@@ -67,10 +40,25 @@ const Register = () => {
     }
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        toast.success("You have been registered!");
-        setTimeout(() => navigate("/"), 500);
-        // saveUserToDB()
+      .then((firebaseResult) => {
+        const userDetails = {
+          email: firebaseResult.user.email,
+          phone,
+          name,
+        };
+        fetch("http://localhost:5000/user/register", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(userDetails),
+        }).then((res) => {
+          console.log(res);
+          if (res.insertedId) {
+            toast.success("You have been registered!");
+            setTimeout(() => navigate("/"), 500);
+          }
+        });
       })
       .catch((error) => {
         toast.error(error.message);

@@ -13,6 +13,7 @@ import Allbuses from "./pages/Allbuses/Allbuses";
 import BusDetails from "./pages/BusDetails/BusDetails";
 import PrivateRoute from "./Routes/PrivateRoute";
 import SearchResults from "./pages/SearchResults/SearchResults";
+import UserProfile from "./pages/UserProfile/UserProfile";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -53,6 +54,12 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "/myprofile/:email",
+        element: <UserProfile></UserProfile>,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/user/info/${params.email}`),
       },
     ],
   },
