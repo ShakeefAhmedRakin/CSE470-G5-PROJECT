@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 
 const CheckoutForm = ({ info, handleStateClear }) => {
   const stripe = useStripe();
@@ -65,7 +66,7 @@ const CheckoutForm = ({ info, handleStateClear }) => {
         payment_method: {
           card: card,
           billing_details: {
-            email: userDetails?.email || "N/A",
+            email: userDetails?.email || user?.email,
             name: userDetails?.name || "N/A",
             phone: userDetails?.phone || "N/A",
           },
@@ -80,7 +81,7 @@ const CheckoutForm = ({ info, handleStateClear }) => {
       if (paymentIntent.status === "succeeded") {
         console.log(paymentIntent);
         const bookingInfo = {
-          email: userDetails?.email || "N/A",
+          email: userDetails?.email || user?.email,
           name: userDetails?.name || "N/A",
           phone: userDetails?.phone || "N/A",
           amount: info.seatInfo.amount,
@@ -118,10 +119,32 @@ const CheckoutForm = ({ info, handleStateClear }) => {
                 .then((data) => {
                   console.log(data);
                   if (data.insertedId) {
-                    toast.success("Seat has been booked");
                     handleStateClear();
                     navigate(`/booking/${data.insertedId}`);
                   }
+                  // EMAILING
+                  emailjs.init(import.meta.env.VITE_emailJSPublicKey);
+                  emailjs
+                    .send(
+                      import.meta.env.VITE_emailJSServiceID,
+                      import.meta.env.VITE_emailJSTemplateID,
+                      {
+                        name: userDetails?.name,
+                        depart: info.seatInfo.busDetails.departure_location,
+                        destination:
+                          info.seatInfo.busDetails.destination_location,
+                        time: info.seatInfo.busDetails.departure_time,
+                        recipient: user?.email,
+                        id: data.insertedId,
+                      }
+                    )
+                    .then((res) => {
+                      console.log(res);
+                      toast.success("Seat has been booked. Check your email.");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
                 });
             }
           });

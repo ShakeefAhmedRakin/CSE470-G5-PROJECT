@@ -54,7 +54,7 @@ const Register = () => {
           body: JSON.stringify(userDetails),
         }).then((res) => {
           console.log(res);
-          if (res.insertedId) {
+          if (res.status === 200) {
             toast.success("You have been registered!");
             setTimeout(() => navigate("/"), 500);
           }
