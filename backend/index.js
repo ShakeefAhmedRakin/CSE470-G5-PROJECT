@@ -28,6 +28,12 @@ async function run() {
     const bookingCollection = client
       .db("BlueLine")
       .collection("bookingCollection");
+    const cancelTicketCollection = client
+      .db("BlueLine")
+      .collection("cancelTicketCollection");
+    const feedBackCollection = client
+      .db("BlueLine")
+      .collection("feedBackCollection");
 
     // GET API FOR ALL BUSES
     app.get("/all-buses", async (req, res) => {
@@ -46,7 +52,7 @@ async function run() {
     // POST API FOR USER REGISTER
     app.post("/user/register", async (req, res) => {
       const userDetails = req.body;
-      const result = userCollection.insertOne(userDetails);
+      const result = await userCollection.insertOne(userDetails);
       res.send(result);
     });
 
@@ -118,6 +124,32 @@ async function run() {
       const email = req.params.email;
       const query = { email };
       const result = await bookingCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // POST API FOR CANCEL TICKET
+    app.post("/cancel-ticket", async (req, res) => {
+      const cancelDetails = req.body;
+      const result = await cancelTicketCollection.insertOne(cancelDetails);
+      res.send(result);
+    });
+
+    // GET API FOR ALL CANCEL TICKETS
+    app.get("/cancel-ticket", async (req, res) => {
+      const result = await cancelTicketCollection.find().toArray();
+      res.send(result);
+    });
+
+    // POST API FOR FEEDBACK
+    app.post("/feedback", async (req, res) => {
+      const feedBackData = req.body;
+      const result = await feedBackCollection.insertOne(feedBackData);
+      res.send(result);
+    });
+
+    // GET API FOR ALL FEEDBACK
+    app.get("/feedback", async (req, res) => {
+      const result = await feedBackCollection.find().toArray();
       res.send(result);
     });
 
