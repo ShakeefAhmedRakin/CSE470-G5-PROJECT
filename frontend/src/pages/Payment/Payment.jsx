@@ -2,23 +2,14 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import { loadStripe } from "@stripe/stripe-js";
 const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK);
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const Payment = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const handleStateClear = () => {
     window.history.replaceState({}, "");
-    navigate("/");
   };
-
-  useEffect(() => {
-    if (location.state === null) {
-      navigate("/");
-    }
-  }, []);
 
   return (
     <>

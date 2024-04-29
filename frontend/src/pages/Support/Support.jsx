@@ -1,6 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 const Support = () => {
+  const [feedbackLoader, setFeedBackLoader] = useState(false);
+
+  // FFEDBACK
+  const handleFeedBackSubmit = (e) => {
+    e.preventDefault();
+    setFeedBackLoader(true);
+
+    const data = {
+      email: e.target.email.value,
+      feedback: e.target.feedback.value,
+    };
+
+    fetch("http://localhost:5000/feedback", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          toast.success("Feedback sent!");
+          setFeedBackLoader(false);
+        } else {
+          toast.error("Internal Server Error");
+          setFeedBackLoader(false);
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        setFeedBackLoader(false);
+      });
+  };
+
   // State to manage which FAQ item is currently open
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -56,131 +92,177 @@ const Support = () => {
     <>
       <div className="min-h-screen container mx-auto">
         <div className="mb-6" data-aos="fade-up" data-aos-delay="50">
-          {/* Customer Support */}
-          <div className="my-16">
-            <h2 className="text-3xl font-bold mb-2">
-              Customer Support Hotlines
-            </h2>
-            <div className="mb-4">
+          <div className="grid grid-cols-2 gap-6 mt-16 mb-6">
+            {/* Customer Support */}
+            <div className="p-4 border-dotted border rounded-xl">
+              <h2 className="text-3xl font-bold mb-2">
+                Customer Support Hotlines
+              </h2>
+              <div className="mb-4">
+                <p className="mb-1">
+                  If you need assistance or have any inquiries, please feel free
+                  to reach out to our dedicated customer support team. Our
+                  representatives are available to assist you.
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="font-medium mb-1">Phone Hotlines:</p>
+                <ul className="list-disc pl-5">
+                  <li>
+                    <span className="font-semibold">General Inquiries:</span>{" "}
+                    Call:{" "}
+                    <a
+                      href="tel:+18001234567"
+                      className="text-blue-500 hover:underline cursor-pointer"
+                    >
+                      +1-800-123-4567
+                    </a>
+                  </li>
+                  <li>
+                    <span className="font-bold mb-1">Booking Assistance:</span>{" "}
+                    Call:{" "}
+                    <a
+                      href="tel:+18009876543"
+                      className="text-blue-500 hover:underline cursor-pointer"
+                    >
+                      +1-800-987-6543
+                    </a>
+                  </li>
+                  <li>
+                    <span className="font-bold mb-1">
+                      Feedback and Complaints:
+                    </span>{" "}
+                    Call:{" "}
+                    <a
+                      href="tel:+18005557890"
+                      className="text-blue-500 hover:underline cursor-pointer"
+                    >
+                      +1-800-555-7890
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold mb-1">Working Hours:</p>
+                <p className="">
+                  Our customer support team is available to assist you during
+                  the following hours:
+                </p>
+                <p className="">
+                  - Monday to Friday: 9:00 AM to 8:00 PM (Local Time)
+                </p>
+                <p className="">
+                  - Saturday and Sunday: 10:00 AM to 6:00 PM (Local Time)
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="font-semibold">Email Support:</p>
+                <p className="">
+                  You can also reach us via email at{" "}
+                  <a
+                    href="mailto:support@example.com"
+                    className="text-blue-500 hover:underline cursor-pointer"
+                  >
+                    support@example.com
+                  </a>
+                  . We strive to respond to all inquiries within 24 hours.
+                </p>
+              </div>
+              <div>
+                <p className="font-semibold">Emergency Support:</p>
+                <p className="">
+                  For urgent matters or emergencies, please dial our emergency
+                  hotline at{" "}
+                  <a
+                    href="tel:+1800911911"
+                    className="text-blue-500 hover:underline cursor-pointer"
+                  >
+                    +1-800-911-911
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+            {/* FEEDBACK FORM */}
+            <div className="bg-[#f2f3f8] rounded-xl p-4 flex flex-col h-full">
+              <h2 className="text-3xl font-bold mb-2">Give us your review!</h2>
               <p className="mb-1">
-                If you need assistance or have any inquiries, please feel free
-                to reach out to our dedicated customer support team. Our
-                representatives are available to assist you.
+                Please use the form below to send us your feedback. Your
+                comments are invaluable to us and will be carefully reviewed by
+                our team. We strive to provide the best possible experience for
+                our users, and your input plays a crucial role in achieving that
+                goal.
               </p>
-            </div>
-            <div className="mb-4">
-              <p className="font-medium mb-1">Phone Hotlines:</p>
-              <ul className="list-disc pl-5">
-                <li>
-                  <span className="font-semibold">General Inquiries:</span>{" "}
-                  Call:{" "}
-                  <a
-                    href="tel:+18001234567"
-                    className="text-blue-500 hover:underline cursor-pointer"
-                  >
-                    +1-800-123-4567
-                  </a>
-                </li>
-                <li>
-                  <span className="font-bold mb-1">Booking Assistance:</span>{" "}
-                  Call:{" "}
-                  <a
-                    href="tel:+18009876543"
-                    className="text-blue-500 hover:underline cursor-pointer"
-                  >
-                    +1-800-987-6543
-                  </a>
-                </li>
-                <li>
-                  <span className="font-bold mb-1">
-                    Feedback and Complaints:
-                  </span>{" "}
-                  Call:{" "}
-                  <a
-                    href="tel:+18005557890"
-                    className="text-blue-500 hover:underline cursor-pointer"
-                  >
-                    +1-800-555-7890
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div className="mb-4">
-              <p className="font-bold mb-1">Working Hours:</p>
-              <p className="">
-                Our customer support team is available to assist you during the
-                following hours:
-              </p>
-              <p className="">
-                - Monday to Friday: 9:00 AM to 8:00 PM (Local Time)
-              </p>
-              <p className="">
-                - Saturday and Sunday: 10:00 AM to 6:00 PM (Local Time)
-              </p>
-            </div>
-            <div className="mb-4">
-              <p className="font-semibold">Email Support:</p>
-              <p className="">
-                You can also reach us via email at{" "}
-                <a
-                  href="mailto:support@example.com"
-                  className="text-blue-500 hover:underline cursor-pointer"
+              <hr className="my-2" />
+              <form
+                onSubmit={handleFeedBackSubmit}
+                className="flex flex-col flex-1 gap-3"
+              >
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className="input input-bordered"
+                  name="email"
+                  required
+                />
+                <textarea
+                  className="textarea textarea-bordered flex-1"
+                  placeholder="Your Feedback"
+                  name="feedback"
+                  required
+                ></textarea>
+                <button
+                  disabled={feedbackLoader}
+                  className="mb-3 btn bg-theme-color text-white border-theme-color hover:text-white hover:bg-theme-color hover:border-theme-color"
                 >
-                  support@example.com
-                </a>
-                . We strive to respond to all inquiries within 24 hours.
-              </p>
-            </div>
-            <div>
-              <p className="font-semibold">Emergency Support:</p>
-              <p className="">
-                For urgent matters or emergencies, please dial our emergency
-                hotline at{" "}
-                <a
-                  href="tel:+1800911911"
-                  className="text-blue-500 hover:underline cursor-pointer"
-                >
-                  +1-800-911-911
-                </a>
-                .
-              </p>
+                  {feedbackLoader ? (
+                    <>
+                      <span className="loading loading-spinner loading-md"></span>
+                    </>
+                  ) : (
+                    "Submit Feedback"
+                  )}
+                </button>
+              </form>
             </div>
           </div>
           {/* FAQ */}
-          <h1 className="text-3xl font-bold mb-10">
-            Frequently Asked Questions
-          </h1>
-          <div className="space-y-4">
-            {faqData.map((faq, index) => (
-              <div className="border border-gray-100 rounded-lg" key={index}>
-                <div
-                  className="flex justify-between items-center px-6 py-5 cursor-pointer"
-                  onClick={() => toggleFAQ(index)}
-                >
-                  <div>
-                    <h1 className="font-bold">{faq.question}</h1>
-                  </div>
-                  <svg
-                    className={`w-7 h-7 transition-transform ${
-                      activeIndex === index ? "transform rotate-90" : ""
-                    }`}
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+          <div className="p-4 border-dotted border rounded-xl bg-[#f7f7f8]">
+            <h1 className="text-3xl font-bold mb-10">
+              Frequently Asked Questions
+            </h1>
+            <div className="space-y-4">
+              {faqData.map((faq, index) => (
+                <div className="border border-gray-100 rounded-lg" key={index}>
+                  <div
+                    className="flex justify-between items-center px-6 py-5 cursor-pointer"
+                    onClick={() => toggleFAQ(index)}
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M6.293 7.293a1 1 0 011.414 0L10 9.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                {activeIndex === index && (
-                  <div className="px-6 py-4">
-                    <p>{faq.answer}</p>
+                    <div>
+                      <h1 className="font-bold">{faq.question}</h1>
+                    </div>
+                    <svg
+                      className={`w-7 h-7 transition-transform ${
+                        activeIndex === index ? "transform rotate-90" : ""
+                      }`}
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M6.293 7.293a1 1 0 011.414 0L10 9.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </div>
-                )}
-              </div>
-            ))}
+                  {activeIndex === index && (
+                    <div className="px-6 py-4">
+                      <p>{faq.answer}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

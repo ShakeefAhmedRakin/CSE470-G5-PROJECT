@@ -13,10 +13,12 @@ import Allbuses from "./pages/Allbuses/Allbuses";
 import BusDetails from "./pages/BusDetails/BusDetails";
 import PrivateRoute from "./Routes/PrivateRoute";
 import Payment from "./pages/Payment/Payment";
-import Completion from "./pages/Payment/Completion";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import BookingDetails from "./pages/BookingDetails/BookingDetails";
+import AllFeedback from "./pages/AllFeedback/AllFeedback";
+import AllCancelTickets from "./pages/AllCancelTickets/AllCancelTickets";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -67,8 +69,14 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/completion",
-        element: <Completion></Completion>,
+        path: "/all-feedback",
+        element: <AllFeedback></AllFeedback>,
+        loader: () => fetch(`http://localhost:5000/feedback`),
+      },
+      {
+        path: "/all-cancel-ticket",
+        element: <AllCancelTickets></AllCancelTickets>,
+        loader: () => fetch(`http://localhost:5000/cancel-ticket`),
       },
       {
         path: "/myprofile/:email",

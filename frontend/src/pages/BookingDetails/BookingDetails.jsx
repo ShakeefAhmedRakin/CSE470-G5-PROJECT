@@ -8,6 +8,9 @@ const BookingDetails = () => {
     <div className="min-h-[65vh] container mx-auto">
       <div className="border-t-2 border-theme-color py-10 px-10 rounded-[10%] bg-[#fdfdfd]">
         <div className="border max-w-xl mx-auto border-dotted p-8 rounded-md">
+          <h1 className="text-center text-2xl font-bold mb-2 text-theme-color">
+            Ticket Details
+          </h1>
           <span
             className={`badge border-none font-bold text-white w-full mb-2 ${
               getBusStatus(data.arrival_time, data.departure_time) ===
@@ -28,9 +31,7 @@ const BookingDetails = () => {
           >
             {getBusStatus(data.arrival_time, data.departure_time)}
           </span>
-          <h1 className="text-center text-4xl text-theme-color font-bold">
-            {data.company}
-          </h1>
+
           <h1 className="text-center text-2xl text-gray-500 font-semibold">
             {data.idnumber}
           </h1>
