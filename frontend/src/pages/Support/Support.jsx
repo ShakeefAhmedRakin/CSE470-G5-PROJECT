@@ -213,7 +213,7 @@ const Support = () => {
                 ></textarea>
                 <button
                   disabled={feedbackLoader}
-                  className="mb-3 btn bg-theme-color text-white border-theme-color hover:text-white hover:bg-theme-color hover:border-theme-color"
+                  className="btn bg-theme-color text-white border-theme-color hover:text-white hover:bg-theme-color hover:border-theme-color"
                 >
                   {feedbackLoader ? (
                     <>
