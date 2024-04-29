@@ -9,6 +9,11 @@ const Search = () => {
     const destination = e.target.destination.value;
     const date = e.target.date.value;
 
+    if (depart === destination) {
+      toast.error("Please select different locations!");
+      return;
+    }
+
     if (depart === "Select Departing Location") {
       toast.error("Select departing location!");
       return;
@@ -51,7 +56,14 @@ const Search = () => {
                 <option defaultValue>Select Departing Location</option>
                 <option value="Dhaka">Dhaka</option>
                 <option value="Chittagong">Chittagong</option>
+                <option value="Khulna">Khulna</option>
+                <option value="Rajshahi">Rajshahi</option>
+                <option value="Barisal">Barisal</option>
+                <option value="Sylhet">Sylhet</option>
+                <option value="Rangpur">Rangpur</option>
+                <option value="Mymensingh">Mymensingh</option>
               </select>
+
               {/* GOING TO */}
               <h2 className="text-theme-color font-semibold text-2xl">
                 Going To
@@ -64,7 +76,14 @@ const Search = () => {
                 <option defaultValue>Select Destination</option>
                 <option value="Dhaka">Dhaka</option>
                 <option value="Chittagong">Chittagong</option>
+                <option value="Khulna">Khulna</option>
+                <option value="Rajshahi">Rajshahi</option>
+                <option value="Barisal">Barisal</option>
+                <option value="Sylhet">Sylhet</option>
+                <option value="Rangpur">Rangpur</option>
+                <option value="Mymensingh">Mymensingh</option>
               </select>
+
               {/* DEPARTING DATE */}
               <h2 className="text-theme-color font-semibold text-2xl">
                 Departing On

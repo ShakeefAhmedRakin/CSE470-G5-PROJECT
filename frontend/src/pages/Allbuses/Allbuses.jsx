@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { getBusStatus } from "../../utils/getBusStatus";
 const Allbuses = () => {
   const [buses, setBuses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +34,29 @@ const Allbuses = () => {
                 className="border rounded-xl flex justify-between items-start p-4"
               >
                 <div className="whitespace-nowrap flex-1">
-                  <h1 className="text-2xl font-medium">{bus.company}</h1>
+                  <h1 className="text-2xl font-medium flex items-center gap-2">
+                    {bus.company}{" "}
+                    <span
+                      className={`badge badge-sm border-none text-white font-bold  ${
+                        getBusStatus(bus.arrival_time, bus.departure_time) ===
+                        "Completed"
+                          ? "bg-green-500"
+                          : ""
+                      } ${
+                        getBusStatus(bus.arrival_time, bus.departure_time) ===
+                        "On Route"
+                          ? "bg-yellow-600"
+                          : ""
+                      } ${
+                        getBusStatus(bus.arrival_time, bus.departure_time) ===
+                        "Upcoming"
+                          ? "bg-theme-color"
+                          : ""
+                      }`}
+                    >
+                      {getBusStatus(bus.arrival_time, bus.departure_time)}
+                    </span>
+                  </h1>
                   <h1 className="text-gray-700">
                     {bus.departure_location} to {bus.destination_location}
                   </h1>
