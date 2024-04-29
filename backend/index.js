@@ -4,9 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-08-01",
-});
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // middleware
 app.use(cors());
@@ -27,6 +25,9 @@ async function run() {
   try {
     const busesCollection = client.db("BlueLine").collection("BusesCollection");
     const userCollection = client.db("BlueLine").collection("userCollection");
+    const bookingCollection = client
+      .db("BlueLine")
+      .collection("bookingCollection");
 
     // GET API FOR ALL BUSES
     app.get("/all-buses", async (req, res) => {
@@ -58,24 +59,66 @@ async function run() {
       });
     });
 
-    // STRIPE
-    app.get("/payment-config", (req, res) => {
+    // STRIPE PAYMENT INTENT API
+    app.post("/create-payment-intent", async (req, res) => {
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: req.body.amount * 10,
+        currency: "bdt",
+        payment_method_types: ["card"],
+      });
+
       res.send({
-        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+        clientSecret: paymentIntent.client_secret,
       });
     });
 
-    app.post("/create-payment-intent", async (req, res) => {
-      try {
-        const paymentIntent = await stripe.paymentIntents.create({
-          currency: "usd",
-          amount: 100,
-          automatic_payment_methods: { enabled: true },
-        });
-        res.send({ clientSecret: paymentIntent.client_secret });
-      } catch (e) {
-        return res.status(400).send({ error: { message: e.message } });
-      }
+    // BOOK SEAT API
+    app.put("/update-seat-status", async (req, res) => {
+      // FIND BUS ID TO UPDATE
+      const busObject = await busesCollection.findOne({
+        _id: new ObjectId(req.body.bus_id),
+      });
+
+      req.body.selectedSeats.forEach((seatNumber) => {
+        const seatIndex = busObject.seats.findIndex(
+          (seat) => seat.seat_number === seatNumber
+        );
+        if (seatIndex !== -1) {
+          busObject.seats[seatIndex].status = "booked";
+          busObject.seats[seatIndex].booked = req.body.email;
+        }
+      });
+
+      const updatedResult = await busesCollection.updateOne(
+        { _id: new ObjectId(req.body.bus_id) },
+        { $set: { seats: busObject.seats } }
+      );
+
+      res.send(updatedResult);
+    });
+
+    app.post("/create-booking-info", async (req, res) => {
+      const bookingDetails = req.body;
+      const result = await bookingCollection.insertOne(bookingDetails);
+      res.send(result);
+    });
+
+    // GET API FOR BOOKING DETAILS
+    app.get("/booking/info/:id", (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: new ObjectId(id) };
+      bookingCollection.findOne(query).then((result) => {
+        res.send(result);
+      });
+    });
+
+    // GET API FOR BOOKINGS BASED ON EMAIL
+    app.get("/bookings/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await bookingCollection.find(query).toArray();
+      res.send(result);
     });
 
     await client.db("admin").command({ ping: 1 });
